@@ -18,6 +18,7 @@ import Data.NetCDF.Types
 import qualified Data.Map as M
 import Data.Word
 import Foreign.C
+import Data.Maybe
 
 -- | Names for dimensions, variables, attributes.
 type Name = String
@@ -130,8 +131,8 @@ data NcInfo a = NcInfo { ncName :: FilePath
 -- | Extract dimension metadata by name.
 ncDim :: NcInfo a -> Name -> Either String NcDim
 ncDim nc n 
-  | isJust ncDim = ncDim
-  | isNothing ncDim = "Could not get dimension for " ++ n
+  | Just ncDim = ncDim
+  | Nothing = "Could not get dimension for " ++ n
   where
     ncDim = M.lookup n $ ncDims nc
 
