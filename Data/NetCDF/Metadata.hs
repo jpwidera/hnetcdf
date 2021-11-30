@@ -131,15 +131,15 @@ data NcInfo a = NcInfo { ncName :: FilePath
 -- | Extract dimension metadata by name.
 ncDim :: NcInfo a -> Name -> Either String NcDim
 ncDim nc n 
-  | isJust ncDim = ncDim
-  | isNothing = "Could not get dimension for " ++ n
+  | isJust ncDim = fromJust ncDim
+  | Nothing = "Could not get dimension for " ++ n
   where
     ncDim = M.lookup n $ ncDims nc
 
 -- | Extract a global attribute by name.
 ncAttr :: NcInfo a -> Name -> Either String NcAttr
 ncAttr nc n  
-  | isJust ncAttr = ncAttr
+  | isJust ncAttr = fromJust ncAttr
   | isNothing ncAttr = "Could not get Attribute for " ++ n
   where
     ncAttr = M.lookup n $ ncAttrs nc
@@ -147,7 +147,7 @@ ncAttr nc n
 -- | Extract variable metadata by name.
 ncVar :: NcInfo a -> Name -> Either String NcVar
 ncVar nc n 
-  | isJust ncVar = ncVar
+  | isJust ncVar = fromJust ncVar
   | isNothing ncVar = "Could not get Variable for " ++ n
   where
     ncVar = M.lookup n $ ncVars nc
@@ -155,7 +155,7 @@ ncVar nc n
 -- | Extract an attribute for a given variable by name.
 ncVarAttr :: NcVar -> Name -> Either String NcAttr
 ncVarAttr v n
-  | isJust ncAttr = ncAttr
+  | isJust ncAttr = fromJust ncAttr
   | isNothing ncAttr = "Could not get Attribute for " ++ n
   where
     ncAttr = M.lookup n $ ncVarAttrs v
