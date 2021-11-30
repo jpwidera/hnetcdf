@@ -128,20 +128,36 @@ data NcInfo a = NcInfo { ncName :: FilePath
 
 
 -- | Extract dimension metadata by name.
-ncDim :: NcInfo a -> Name -> Maybe NcDim
-ncDim nc n = M.lookup n $ ncDims nc
+ncDim :: NcInfo a -> Name -> Either (String NcDim)
+ncDim nc n 
+  | isJust ncDim = ncDim
+  | isNothing ncDim = "Could not get dimension for " ++ n
+  where
+    ncDim = M.lookup n $ ncDims nc
 
 -- | Extract a global attribute by name.
-ncAttr :: NcInfo a -> Name -> Maybe NcAttr
-ncAttr nc n = M.lookup n $ ncAttrs nc
+ncAttr :: NcInfo a -> Name -> Either (String NcAttr)
+ncAttr nc n  
+  | isJust ncAttr = ncAttr
+  | isNothing ncAttr = "Could not get Attribute for " ++ n
+  where
+    ncAttr = M.lookup n $ ncAttrs nc
 
 -- | Extract variable metadata by name.
-ncVar :: NcInfo a -> Name -> Maybe NcVar
-ncVar nc n = M.lookup n $ ncVars nc
+ncVar :: NcInfo a -> Name -> Either (String NcVar)
+ncVar nc n 
+  | isJust ncVar = ncVar
+  | isNothing ncVar = "Could not get Variable for " ++ n
+  where
+    ncVar = M.lookup n $ ncVars nc
 
 -- | Extract an attribute for a given variable by name.
-ncVarAttr :: NcVar -> Name -> Maybe NcAttr
-ncVarAttr v n = M.lookup n $ ncVarAttrs v
+ncVarAttr :: NcVar -> Name -> Either (String NcAttr)
+ncVarAttr v n
+  | isJust ncAttr = ncAttr
+  | isNothing ncAttr = "Could not get Attribute for " ++ n
+  where
+    ncAttr M.lookup n $ ncVarAttrs v
 
 
 -- | Empty NcInfo value to build on.
