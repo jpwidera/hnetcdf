@@ -131,32 +131,32 @@ data NcInfo a = NcInfo { ncName :: FilePath
 -- | Extract dimension metadata by name.
 ncDim :: NcInfo a -> Name -> Either String NcDim
 ncDim nc n 
-  | isJust ncDim = fromJust ncDim
-  | Nothing = "Could not get dimension for " ++ n
+  | isJust ncDim = Right $ fromJust ncDim
+  | Nothing = Left $ "Could not get dimension for " ++ n ++ "."
   where
     ncDim = M.lookup n $ ncDims nc
 
 -- | Extract a global attribute by name.
 ncAttr :: NcInfo a -> Name -> Either String NcAttr
 ncAttr nc n  
-  | isJust ncAttr = fromJust ncAttr
-  | isNothing ncAttr = "Could not get Attribute for " ++ n
+  | isJust ncAttr = Right $ fromJust ncAttr
+  | isNothing ncAttr = Left $ "Could not get Attribute for " ++ n ++ "."
   where
     ncAttr = M.lookup n $ ncAttrs nc
 
 -- | Extract variable metadata by name.
 ncVar :: NcInfo a -> Name -> Either String NcVar
 ncVar nc n 
-  | isJust ncVar = fromJust ncVar
-  | isNothing ncVar = "Could not get Variable for " ++ n
+  | isJust ncVar = Right $ fromJust ncVar
+  | isNothing ncVar = Left $ "Could not get Variable for " ++ n ++ "."
   where
     ncVar = M.lookup n $ ncVars nc
 
 -- | Extract an attribute for a given variable by name.
 ncVarAttr :: NcVar -> Name -> Either String NcAttr
 ncVarAttr v n
-  | isJust ncAttr = fromJust ncAttr
-  | isNothing ncAttr = "Could not get Attribute for " ++ n
+  | isJust ncAttr = Right $ fromJust ncAttr
+  | isNothing ncAttr = Left $ "Could not get Attribute for " ++ n ++ "."
   where
     ncAttr = M.lookup n $ ncVarAttrs v
 
