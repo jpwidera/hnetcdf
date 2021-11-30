@@ -132,7 +132,7 @@ data NcInfo a = NcInfo { ncName :: FilePath
 ncDim :: NcInfo a -> Name -> Either String NcDim
 ncDim nc n 
   | isJust ncDim = Right $ fromJust ncDim
-  | Nothing = Left $ "Could not get dimension for " ++ n ++ "."
+  | isNothing ncDim  = Left $ "Could not get dimension for " ++ n ++ "."
   where
     ncDim = M.lookup n $ ncDims nc
 
