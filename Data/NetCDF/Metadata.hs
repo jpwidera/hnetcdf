@@ -157,7 +157,7 @@ ncVarAttr v n
   | isJust ncAttr = ncAttr
   | isNothing ncAttr = "Could not get Attribute for " ++ n
   where
-    ncAttr M.lookup n $ ncVarAttrs v
+    ncAttr = M.lookup n $ ncVarAttrs v
 
 
 -- | Empty NcInfo value to build on.
