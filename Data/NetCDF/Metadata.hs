@@ -131,8 +131,8 @@ data NcInfo a = NcInfo { ncName :: FilePath
 -- | Extract dimension metadata by name.
 ncDim :: NcInfo a -> Name -> Either String NcDim
 ncDim nc n 
-  | Just ncDim = ncDim
-  | Nothing = "Could not get dimension for " ++ n
+  | isJust ncDim = ncDim
+  | isNothing = "Could not get dimension for " ++ n
   where
     ncDim = M.lookup n $ ncDims nc
 
