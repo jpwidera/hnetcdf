@@ -64,7 +64,6 @@ import Data.NetCDF.Utils
 import Control.Exception (bracket)
 import Control.Monad (forM, forM_, void)
 import Data.Bits ((.|.))
-import Data.Maybe (fromMaybe)
 import qualified Data.Map as M
 import Foreign.C
 import System.IO (IOMode (..))
@@ -278,11 +277,11 @@ coardsScale :: forall a b s. (NcStorable a, NcStorable b, FromNcAttr a,
                               NcStoreExtraCon s a, NcStoreExtraCon s b)
              => NcVar -> s a -> s b
 coardsScale v din = smap xform din
-  where offset = fromMaybe 0.0 $
+  where offset = 0.0 $
                  ncVarAttr v "add_offset" >>= fromAttr :: CDouble
-        scale = fromMaybe 1.0 $
+        scale = 1.0 $
                 ncVarAttr v "scale_factor" >>= fromAttr :: CDouble
-        fill = ncVarAttr v "_FillValue" >>= fromAttr :: Maybe a
+        fill = ncVarAttr v "_FillValue" >>= fromAttr :: a
         xform x = case fill of
           Nothing -> realToFrac $ realToFrac x * scale + offset
           Just f -> if x == f
