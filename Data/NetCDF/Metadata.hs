@@ -128,7 +128,7 @@ data NcInfo a = NcInfo { ncName :: FilePath
 
 
 -- | Extract dimension metadata by name.
-ncDim :: NcInfo a -> Name -> Either (String NcDim)
+ncDim :: NcInfo a -> Name -> Either String NcDim
 ncDim nc n 
   | isJust ncDim = ncDim
   | isNothing ncDim = "Could not get dimension for " ++ n
@@ -136,7 +136,7 @@ ncDim nc n
     ncDim = M.lookup n $ ncDims nc
 
 -- | Extract a global attribute by name.
-ncAttr :: NcInfo a -> Name -> Either (String NcAttr)
+ncAttr :: NcInfo a -> Name -> Either String NcAttr
 ncAttr nc n  
   | isJust ncAttr = ncAttr
   | isNothing ncAttr = "Could not get Attribute for " ++ n
@@ -144,7 +144,7 @@ ncAttr nc n
     ncAttr = M.lookup n $ ncAttrs nc
 
 -- | Extract variable metadata by name.
-ncVar :: NcInfo a -> Name -> Either (String NcVar)
+ncVar :: NcInfo a -> Name -> Either String NcVar
 ncVar nc n 
   | isJust ncVar = ncVar
   | isNothing ncVar = "Could not get Variable for " ++ n
@@ -152,7 +152,7 @@ ncVar nc n
     ncVar = M.lookup n $ ncVars nc
 
 -- | Extract an attribute for a given variable by name.
-ncVarAttr :: NcVar -> Name -> Either (String NcAttr)
+ncVarAttr :: NcVar -> Name -> Either String NcAttr
 ncVarAttr v n
   | isJust ncAttr = ncAttr
   | isNothing ncAttr = "Could not get Attribute for " ++ n
